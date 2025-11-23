@@ -1,5 +1,4 @@
-# WelcomeMessage Plugin 🎉
-
+<h1>WelcomeMessage Plugin<img src="icon.png" height="64" width="64" align="left"></img></h1><br/>
 A powerful and customizable welcome message plugin for PocketMine-MP with amazing particles and effects!
 
 ## ✨ Features
@@ -52,3 +51,4 @@ effects:
   particle-type: "Heart"  # HappyVillager, Heart, Flame, Lava, Portal, Enderman
 
   particle-count: 12
+
