@@ -23,7 +23,7 @@ A powerful and customizable welcome message plugin for PocketMine-MP with amazin
 ## 📦 Installation
 
 1. Download the latest release from [GitHub , Poggit]
-2. Place the `WelcomeMessage.phar` in your `plugins` folder
+2. Place the `WelcomeMessage (folder)` in your `plugins` folder
 3. Restart your server
 4. Configure to your liking in `plugin_data\WelcomeMessage\config.yml`
 
@@ -50,4 +50,5 @@ effects:
   sound: true
   particles: true
   particle-type: "Heart"  # HappyVillager, Heart, Flame, Lava, Portal, Enderman
+
   particle-count: 12
