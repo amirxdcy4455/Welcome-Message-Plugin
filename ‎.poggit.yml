@@ -7,4 +7,5 @@ projects:
     path: ""
     model: plugin
     type: project
+    icon: "icon.png"
 ...
