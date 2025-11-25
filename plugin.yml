@@ -4,5 +4,4 @@ version: 1.0.0
 main: Amirxd\WelcomeMsg\WelcomeMessage
 author: Amirxd
 description: Advanced Welcome Message Plugin
-
-
+license: MIT
