@@ -3,6 +3,8 @@ build-by-default: true
 branches:
 - main
 projects:
-  Welcome-Message-Plugin:
+  WelcomeMessage:
     path: ""
+    model: plugin
+    type: project
 ...
