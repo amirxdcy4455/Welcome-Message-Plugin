@@ -21,6 +21,3 @@ effects:
   particles: true
   particle-type: "Heart"  # HappyVillager, Heart, Flame, Lava, Portal, Enderman
   particle-count: 12
-
-
-
