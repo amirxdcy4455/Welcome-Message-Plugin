@@ -9,57 +9,71 @@ use pocketmine\world\particle\HappyVillagerParticle;
 use pocketmine\world\particle\HeartParticle;
 use pocketmine\world\particle\LavaParticle;
 use pocketmine\world\particle\PortalParticle;
+use pocketmine\world\sound\PopSound;
+use pocketmine\world\sound\PotionSplashSound;
+use pocketmine\world\sound\ShulkerBoxOpenSound;
+use pocketmine\world\sound\SmokerSound;
+use pocketmine\world\sound\TotemUseSound;
+use pocketmine\world\sound\XpLevelUpSound;
 
 class Manager
 {
     public static function sendWelcomeMessage(Player $player): void
     {
-        if (!WelcomeMessage::getInstance()->getConfig()->getNested("welcome-message.enabled", true)) {
+        $manager = WelcomeMessage::getInstance()->getDataManager();
+        if (!$manager->getMessageStatus()) {
             return;
         }
 
-        $message = WelcomeMessage::getInstance()->getConfig()->getNested("welcome-message.message", "§6Welcome {player}!");
-        $message = str_replace("{player}", $player->getName(), $message);
-
-        if (WelcomeMessage::getInstance()->getConfig()->getNested("welcome-message.broadcast-to-all", true)) {
-            WelcomeMessage::getInstance()->getServer()->broadcastMessage($message);
-            return;
-        }
-
+        $message = $manager->getSenderTag() . $manager->getMessageText();
+        $message = str_replace("{player.name}", $player->getName(), $message);
         $player->sendMessage($message);
+
+        if ($manager->getBroadcastStatus()) {
+            $b_msg = $manager->getSenderTag() . $manager->getBroadcastMessage();
+            $b_msg = str_replace("{player.name}", $player->getName(), $b_msg);
+            WelcomeMessage::getInstance()->getServer()->broadcastMessage($b_msg);
+            return;
+        }
+
+
     }
 
     public static function sendWelcomeTitle(Player $player): void
     {
-        if (!WelcomeMessage::getInstance()->getConfig()->getNested("title.enabled", true)) {
+        $manager = WelcomeMessage::getInstance()->getDataManager();
+
+        if (!$manager->getTitleStatus()) {
             return;
         }
 
         $title = str_replace(
-            "{player}",
+            "{player.name}",
             $player->getName(),
-            WelcomeMessage::getInstance()->getConfig()->getNested("title.title", "§bWelcome!")
+            $manager->getTitleText()
         );
-        $subtitle = WelcomeMessage::getInstance()->getConfig()->getNested("title.subtitle", "§7Enjoy your stay!");
-
+        $subtitle = $manager->getSubTitleText();
+        $title_data = $manager->getTitleData();
         $player->sendTitle(
             $title,
             $subtitle,
-            WelcomeMessage::getInstance()->getConfig()->getNested("title.fadein", 20),
-            WelcomeMessage::getInstance()->getConfig()->getNested("title.stay", 60),
-            WelcomeMessage::getInstance()->getConfig()->getNested("title.fadeout", 20)
+            $title_data["fadein"],
+            $title_data["stay"],
+            $title_data["fadeout"]
         );
     }
 
-    public static function applyParticles(Player $player): void
+    public static function applyEffects(Player $player): void
     {
-        if (!WelcomeMessage::getInstance()->getConfig()->getNested("effects.particles", true)) {
+        $manager = WelcomeMessage::getInstance()->getDataManager();
+
+        if (!$manager->getParticleStatus()) {
             return;
         }
 
-        $config = WelcomeMessage::getInstance()->getConfig();
-        $particleType = $config->getNested("effects.particle-type", "HappyVillager");
-        $count = $config->getNested("effects.particle-count", 10);
+
+        $particleType = $manager->getParticleType();
+        $count = $manager->getParticleCount();
 
         $particles = [
             "HappyVillager" => new HappyVillagerParticle(),
@@ -80,5 +94,27 @@ class Manager
             );
             $player->getWorld()->addParticle($pos, $particle);
         }
+
+        if ($manager->getSoundStatus()){
+            $sounds = [
+                "Potion" => new PotionSplashSound(),
+                "ShulkerBox" => new ShulkerBoxOpenSound(),
+                "TotemUse" => new TotemUseSound(),
+                "XP" => new XpLevelUpSound(10),
+                "Smoker" => new SmokerSound(),
+                "pop" => new PopSound()
+            ];
+
+            $sound_type = $manager->getSoundType();
+            $sound = $sounds[$sound_type] ?? $sounds["XP"];
+
+
+            $player->getWorld()->addSound($player->getPosition(), $sound);
+        }
     }
+
+
+
+
+
 }

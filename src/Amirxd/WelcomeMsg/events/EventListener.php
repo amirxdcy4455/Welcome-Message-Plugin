@@ -18,7 +18,7 @@ class EventListener implements Listener
 
         Manager::sendWelcomeTitle($player);
 
-        Manager::applyParticles($player);
+        Manager::applyEffects($player);
 
         if (WelcomeMessage::getInstance()->getConfig()->getNested("effects.sound")) {
             $player->getWorld()->addSound($player->getPosition(), new PopSound());
